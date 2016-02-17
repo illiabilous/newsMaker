@@ -15,13 +15,16 @@ public class Rewrite {
 		String content=autochangedText(newsText, newsTitle, sameWords);
 		//System.err.println(content);
 		content=addImage(content, newsImage, newsTitle);
-		System.out.println("CONTENT IS PREPARED");
+		//System.out.println("CONTENT IS PREPARED");
 		return content;
 	}
 	
 	 String addImage (String content, String image, String title){
-		String imageblock="<img class=\"aligncenter\" src=\""+image+"\" border=\"2\" alt=\""+title+"\" >";
-		return imageblock+content;
+		if(image.contains("http")){
+			String imageblock="<img class=\"aligncenter\" src=\""+image+"\" border=\"2\" alt=\""+title+"\" >";
+			return imageblock+content;
+		}
+		else return content;
 	}
 	static ArrayList<String> wordMaxSimilarList (String text)
 	{
@@ -31,8 +34,7 @@ public class Rewrite {
 		Matcher match = patt.matcher(text);
 		String piece="";
 		
-		for(int i=0;match.find();i++)
-		{	
+		while(match.find()){	
 			piece = match.group(1);
 			if(piece.length()>2)
 			list.add(piece);
@@ -86,7 +88,6 @@ public class Rewrite {
 			
 			maxQuan.add(max);
 			maxList.add(list.get(maxindex));
-		//	System.out.println(maxList.get(k)+" "+maxQuan.get(k));
 			quantity.remove(maxindex);
 			list.remove(maxindex);
 		}
@@ -126,7 +127,6 @@ public class Rewrite {
 				newText=newText.replace(word,replacer(word));	
 			}			
 		}
-		System.out.println("^^ WOW! Successfull autochange ^^ \n");
 		return newText;
 	}
 	static String replacer (String toReplace){
@@ -187,16 +187,16 @@ public class Rewrite {
 		
 		return toReplace;
 	}
+	
 	static String getmeta(String text) { //SEO meta
 		Pattern patt = Pattern.compile("(<p>)(.*?)(</p)");
 		Matcher match = patt.matcher(text);
 		if (match.find()) {
 				text = match.group(2);
 		}
-		text=text.replace("&laquo;", "");
-		text=text.replace("&nbsp;", " ");
-		text=text.replace("&raquo;", "");
-		return text;
+		if(text.length()<140)
+			return text;
+		else return text.replace(text, text.substring(0,140));
 		
 	}
 }

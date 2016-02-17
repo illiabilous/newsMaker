@@ -5,7 +5,7 @@ public class TitleEdit {
 		newsTitle=newsTitle.replace("»","");
 		newsTitle=newsTitle.replace(". Видео","");
 		newsTitle=newsTitle.replace(". ВИДЕО","");
-		System.out.println("TITLE IS PREPARED");
+		//System.out.println("TITLE IS PREPARED");
 		return newsTitle;
 	}
 	

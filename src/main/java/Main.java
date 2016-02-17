@@ -1,5 +1,8 @@
 import java.io.IOException;
+import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -16,12 +19,17 @@ public class Main {
 	static NewsParcer news = new NewsParcer();
 	static Rewrite rewrite = new Rewrite();
 	static ImageTreatment download = new ImageTreatment();
-	static TitleEdit titlemod = new TitleEdit();
-	
-	
-	public static void main(String[] args) throws IOException {	
+	static TitleEdit titleedit = new TitleEdit();
+	static MysqlDAO mysql=new MysqlDAO();
+	static 	ArrayList<String> PAGES = new ArrayList<>();
+	static List<String> currentNewsTitles = new ArrayList<>();
+	static List<Integer> titleTaxonomies = new ArrayList<>();
+	public static void main(String[] args) throws IOException, ParseException, InterruptedException, SQLException {
+		int counterNews=0;
+		int maxId=mysql.selectMaxID();
+		currentNewsTitles=mysql.selectTranslationQuery(maxId);
+		System.err.println(currentNewsTitles);
 		
-		ArrayList<String> PAGES = new ArrayList<>();
 		PAGES.add("http://sport.rbc.ru/news/football/");
 		PAGES.add("http://sport.rbc.ru/article/football/");
 		for(int page=0; page<PAGES.size(); page++){
@@ -43,10 +51,10 @@ public class Main {
 				String newsText=news.getNewsText(newsHtml);//текст
 				
 				//TITLE EDIT - replacing \" and ". ВІДЕО"
-				String posttitle = titlemod.titlereplace(newsTitle);
-				System.out.println(posttitle);
+				String postTitle = titleedit.titlereplace(newsTitle);
+				System.out.println(postTitle);
 				
-				String postname=titlemod.newsNameGenerator(posttitle);
+				String postName=titleedit.newsNameGenerator(postTitle);
 				
 				//DOWNLOADING Image to PC
 				/*if (newsImage!=null){
@@ -54,21 +62,30 @@ public class Main {
 				}*/
 				
 				//==== REWRITE - text content formation
-				String postcontent=rewrite.rewrite(newsText, newsTitle, newsImage);
-				System.out.println(postcontent);
+				String postContent=rewrite.rewrite(newsText, newsTitle, newsImage);
+				//System.out.println(postContent);
+				System.out.println(maxId);
 				
-				//==== SEO formation
-				String seokeywords=posttitle;
-				String seotitle=newsTitle;
-				String seometa=rewrite.getmeta(newsText);
-				//System.out.println("meta "+meta);
+				//====== add post to DB;
 				
-				
-				//----DB--------
-				//!!add news to DB;
-				//!!add to DB seo;
-				//!!add relationship to DB;
-				
+				if(!currentNewsTitles.contains(postTitle)){
+					
+					
+					System.out.println("POST TITLE(in Main) "+postTitle);
+					mysql.insertTranslationQuery(postContent, postTitle, postName);
+					long newsId=mysql.newsId(postTitle);
+					
+					titleTaxonomies=news.getNewsTaxonomy(postTitle);
+					
+					//System.out.println("news id"+newsId);
+					
+					for (int i = 0; i < titleTaxonomies.size(); i++) {
+						System.out.println("news taxon "+titleTaxonomies.get(i));
+						mysql.insertTerm(newsId, titleTaxonomies.get(i));
+					}
+					
+				mysql.insertSeo(newsId,postTitle,postContent);
+				}
 				
 				
 				System.err.println("===THE END OF THIS article===\n");
