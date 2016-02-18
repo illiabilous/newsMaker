@@ -100,16 +100,17 @@ public class NewsParcer {
 		headerAndHref.put("Франц",44);
 		headerAndHref.put("Росси",39);
 		headerAndHref.put("Укра",45);
-		headerAndHref.put("Чемпионов",37);
-		headerAndHref.put("Лига чемпион",37);  
-		headerAndHref.put("Лиги чемпион",37);  
-		headerAndHref.put("ЛЧ",37);
-		headerAndHref.put("ЛЕ",38);
-		headerAndHref.put("Лига Европы",38);
-		headerAndHref.put("ЧЕ",34);
-		//headerAndHref.put("Чемпионат Европы",34);
-		headerAndHref.put("Лиги Европы",38);
-		headerAndHref.put("Евро",34);
+		headerAndHref.put("Чемпионов",33);
+		headerAndHref.put("Лига чемпион",33);  
+		headerAndHref.put("Лиги чемпион",33);  
+		headerAndHref.put("Лиге чемпион",33);  		
+		headerAndHref.put("ЛЧ",33);
+		headerAndHref.put("ЛЕ",32);
+		headerAndHref.put("Лига Европы",32);
+		headerAndHref.put("ЧЕ",32);
+		headerAndHref.put("Чемпионат Европы",34);
+		headerAndHref.put("Лиги Европы",32);
+		headerAndHref.put("Евро-",34);
 		headerAndHref.put("Мира",34);
 		headerAndHref.put("Сборн",34);
 		

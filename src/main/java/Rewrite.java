@@ -13,12 +13,28 @@ public class Rewrite {
 		sameWords=wordMaxSimilarList(newsText);
 		//System.out.println(sameWords);
 		String content=autochangedText(newsText, newsTitle, sameWords);
+		content=firstParagraphReplace(newsText, content);
 		//System.err.println(content);
 		content=addImage(content, newsImage, newsTitle);
 		//System.out.println("CONTENT IS PREPARED");
 		return content;
 	}
-	
+	String firstParagraphReplace(String newsText, String content){
+		String firsttext=null;
+		String secondtext=null;
+		Pattern patt1 = Pattern.compile("(<p>)(.*?)(</p)");
+		Matcher match1 = patt1.matcher(newsText);
+		if (match1.find()) {
+				 firsttext = match1.group(2);
+		}
+		Pattern patt2 = Pattern.compile("(<p>)(.*?)(</p)");
+		Matcher match2 = patt2.matcher(content);
+		if (match2.find()) {
+				 secondtext = match2.group(2);
+		}
+		content=content.replace(secondtext, firsttext);
+		return content;
+	}
 	 String addImage (String content, String image, String title){
 		if(image.contains("http")){
 			String imageblock="<img class=\"aligncenter\" src=\""+image+"\" border=\"2\" alt=\""+title+"\" >";

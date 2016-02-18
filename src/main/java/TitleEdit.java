@@ -15,6 +15,7 @@ public class TitleEdit {
 		title = title.replace(".", "-");
 		title = title.replace("–", "");
 		title = title.replace(",", "-");
+		title = title.replace("/", "-");
 	
 		char[] english = { 'a', 'b', 'v', 'g', 'd', 'e', 'e', 'j', 'z', 'i',
 		'k', 'l', 'm', 'n', 'o', 'p', 'r', 's', 't', 'h', 'f', 'u',
